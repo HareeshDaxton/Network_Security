@@ -1,30 +1,16 @@
 from network_security_workspace.components.data_ingestion import DataIngestion
 from network_security_workspace.logging.logger import logging
 from network_security_workspace.exception.exception import NetworkSecurityException
-from network_security_workspace.entity.config_entity import DataIngestionConfig, DataValidationConfig
+from network_security_workspace.entity.config_entity import DataIngestionConfig, DataValidationConfig, DataTransformationConfig
 from network_security_workspace.entity.config_entity import TrainingPipelineConfig
 
 from network_security_workspace.components.data_validation import DataValidation
-
+from network_security_workspace.components.data_transformation import DataTransformation
 import sys
 
 if __name__ == "__main__":
     
     try:
-        # tainingpipelineconfig = TrainingPipelineConfig()
-        # dataingestionconfig = DataIngestionConfig(tainingpipelineconfig)
-        # data_ingestion = DataIngestion(dataingestionconfig)
-        # logging.info("initiate the data ingestion")
-        # dataingestionartifacts = data_ingestion.initiate_data_ingestion()
-        # logging.info("Completed the data ingestion")
-        # print(dataingestionartifacts)
-        # data_validation_config = DataValidationConfig(tainingpipelineconfig)
-        # data_validation = DataValidation(dataingestionartifacts, data_validation_config)
-        # logging.info("Initiate the data validation")
-        # data_validation_artifact = data_validation.initiate_data_validation()
-        # logging.info("Completed the data validation")
-        # print(data_validation_artifact)
-        
         training_pipeline_config = TrainingPipelineConfig()   # fixed typo
         data_ingestion_config = DataIngestionConfig(training_pipeline_config)
         data_ingestion = DataIngestion(data_ingestion_config)
@@ -41,5 +27,13 @@ if __name__ == "__main__":
         data_validation_artifact = data_validation.initiate_data_validation()
         logging.info("Completed Data Validation")
         print(data_validation_artifact)
+        
+        logging.info("Starting Data Transformation")
+        data_transformation_config = DataTransformationConfig(training_pipeline_config)
+        data_transformation = DataTransformation(data_validation_artifact, data_transformation_config)
+        data_transformation_artifact = data_transformation.initiate_data_transformation()
+        print(data_transformation_artifact)
+        logging.info("Completed Data Transformation")
+        
     except Exception as e:
         raise NetworkSecurityException(e, sys)
